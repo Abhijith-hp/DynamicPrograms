@@ -1,16 +1,20 @@
 class Solution {
 public:
-    int helper(int i,int j,string &s,string &t){
+    int helper(int i,int j,string &s,string &t,vector<vector<int>>&dp){
 
         if(j<0) return 1;
         if(i<0) return 0;
-        
+        if(dp[i][j]!=-1) return dp[i][j];
         if(s[i]==t[j])
-          return helper(i-1,j-1,s,t)+helper(i-1,j,s,t);
-        return helper(i-1,j,s,t);
+          dp[i][j]= helper(i-1,j-1,s,t,dp)+helper(i-1,j,s,t,dp);
+        else
+          dp[i][j]= helper(i-1,j,s,t,dp);
+        
+        return dp[i][j];
         
     }
     int numDistinct(string s, string t) {
-        return helper(s.size()-1,t.size()-1,s,t);
+        vector<vector<int>>dp(s.size(),vector<int>(t.size(),-1));
+        return helper(s.size()-1,t.size()-1,s,t,dp);
     }
 };
