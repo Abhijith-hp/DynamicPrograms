@@ -4,30 +4,29 @@ public:
     bool isMatch(string s, string p) {
         int m =p.size();
         int n = s.size();
-        vector<vector<bool>>dp(m+1,vector<bool>(n+1,false));
-        dp[0][0] = true;
-        for(int j=1;j<=n;j++) dp[0][j] = false;
-        for(int i=1;i<=m;i++) {
-            bool flag = true;
-            for(int k=0;k<i;k++){
-                if(p[k]!='*'){
-                    flag=false;
-                    break;
-                }
-            }
-            dp[i][0]=flag;
-        }
-
+        vector<bool>prev(n+1,false);
+        vector<bool>curr(n+1,false);
+        prev[0] = true;
+        for(int j=1;j<=n;j++) prev[j] = false;
             for(int i=1;i<=m;i++){
-                for(int j=1;j<=n;j++){
-                    if(p[i-1]==s[j-1] || p[i-1]=='?')
-                       dp[i][j]=dp[i-1][j-1];
-                    else if(p[i-1]=='*')
-                        dp[i][j] =  dp[i-1][j] || dp[i][j-1];
-                    else dp[i][j]=false; 
+                bool flag = true;
+                for(int k=0;k<i;k++){
+                    if(p[k]!='*'){
+                        flag=false;
+                        break;
+                    }
                 }
+            curr[0]=flag;
+             for(int j=1;j<=n;j++){
+                if(p[i-1]==s[j-1] || p[i-1]=='?')
+                    curr[j]=prev[j-1];
+                else if(p[i-1]=='*')
+                    curr[j] =  prev[j] || curr[j-1];
+                else curr[j]=false; 
+                }
+            prev = curr;
             }
         
-        return dp[m][n];
+        return prev[n];
     }
 };
