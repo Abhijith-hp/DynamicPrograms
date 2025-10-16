@@ -15,7 +15,17 @@ public:
         cuts.insert(cuts.begin(),0);
         std::sort(cuts.begin(),cuts.end());
         int c = cuts.size();
-        vector<vector<int>> dp(c-1, vector<int>(c-1, -1)); 
-        return helper(1,c-2,cuts,dp);
+        vector<vector<int>> dp(c, vector<int>(c, 0)); 
+        for(int i = c-2;i>=1;i--){
+            for(int j = 1;j<=c-2;j++){
+                int ans = INT_MAX;
+                for(int index = i;index <=j ;index++){
+                    int cost =  cuts[j+1] - cuts[i-1] + dp[i][index-1]+dp[index+1][j];
+                    ans = min(cost,ans);
+                    dp[i][j] = ans;
+                }   
+            }
+        }
+        return dp[1][c-2];
     }
 };
