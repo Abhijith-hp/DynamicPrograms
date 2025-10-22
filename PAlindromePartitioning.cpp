@@ -7,20 +7,24 @@ class Solution {
         }
         return true;
     }
-    int minCuts(int i,string &s){
+    int minCuts(int i,string &s,vector<int>&dp){
+       
         int n = s.size();
         if(i==n) return 0;
+         if(dp[i]!=-1) return dp[i];
+       
         int mini = INT_MAX;
         for(int j=i;j<n;j++){
             if(isPalindrome(i,j,s)){
-               int cost = 1 + minCuts(j+1,s);
+               int cost = 1 + minCuts(j+1,s,dp);
                mini = min(mini,cost);
             }
         }
-        return mini;
+        return dp[i]= mini;
     }
     int palPartition(string &s) {
-       return minCuts(0,s)-1;
+       vector<int>dp(s.size(),-1);
+       return minCuts(0,s,dp)-1;
         
     }
 };
